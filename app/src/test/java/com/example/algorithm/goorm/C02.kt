@@ -112,7 +112,7 @@ class C02 {
         // sqrt 제곱근 (루트)
         // 주어진 점중 가장 최소 거리를 생성 한다.
 
-        val points = arrayOf<Point2D>(Point2D(10, 1),
+        val points = arrayOf(Point2D(10, 1),
             Point2D(10, 10),
             Point2D(650, 100),
             Point2D(20, 100),
@@ -146,6 +146,8 @@ class C02 {
 
         val distance = Math.sqrt(minSqd.toDouble())
         println("distance : $distance ($minCnt)")
+
+        // 이게 답인지를 모르겠네? =_ =?ㅋ
     }
 
     data class Point2D(var x: Int, var y: Int) {
@@ -159,5 +161,104 @@ class C02 {
         fun distanceTo(target: Point2D): Double {
             return Math.sqrt(squaredDistanceTo(target).toDouble())
         }
+    }
+
+    @Test
+    fun ex07() {
+        // 버블 소트
+        val arr = arrayOf(154, 160, 160, 166, 164, 159, 170)
+        val sorted = bubbleSort(arr)
+
+        println("res : ${sorted.contentToString()}")
+    }
+
+    private fun bubbleSort(arr: Array<Int>): Array<Int> {
+        // https://gmlwjd9405.github.io/2018/05/06/algorithm-bubble-sort.html
+        // 인접한 2개의 레코드를 비교하여 크기가 순서대로 되어 있지 않으면 서로 교환한다.
+
+        // 버블 정렬은 첫 번째 자료와 두 번째 자료를, 두 번째 자료와 세 번째 자료를, 세 번째와 네 번째를, …
+        // 이런 식으로 (마지막-1)번째 자료와 마지막 자료를 비교하여 교환하면서 자료를 정렬한다.
+
+        // 1회전을 수행하고 나면 가장 큰 자료가 맨 뒤로 이동하므로 2회전에서는 맨 끝에 있는 자료는 정렬에서 제외되고,
+        // 2회전을 수행하고 나면 끝에서 두 번째 자료까지는 정렬에서 제외된다.
+        // 이렇게 정렬을 1회전 수행할 때마다 정렬에서 제외되는 데이터가 하나씩 늘어난다.
+
+        var i = arr.size - 1
+        var j = 0
+        var tmp = 0
+
+        while (i > 0) {
+            j = 0
+
+            while (j < i) {
+                // < = 큰 순서
+                // > = 작은 순서
+                if (arr[j] > arr[j + 1]) {
+                    tmp = arr[j]
+                    arr[j] = arr[j + 1]
+                    arr[j + 1] = tmp
+                }
+
+                ++j
+            }
+
+            --i
+        }
+
+        return arr
+    }
+
+    @Test
+    fun ex08() {
+        // 좌표 값이 반지름 R 인 원에 포함되는지 ?
+
+        val R = 100L
+        var sum = 0L
+        var y = R
+        var x = 0L
+
+        while (x <= R) {
+            var height = 0L
+
+            while (y >= 0) {
+                if (isInside(x, y, R)) {
+                    height = y + 1L
+                    break
+                }
+
+                --y
+            }
+
+            sum += height
+            ++x
+        }
+
+        println("pixel : ${sum * 4}")
+    }
+
+    private fun isInside(x: Long, y: Long, r: Long): Boolean {
+        val sqd = x * x + y * y // 거리의 제곱
+        if (sqd < r * r) {
+            // 원점과의 거리가 반지름 보다 작으면 원안에 있는 것
+            return true
+        }
+
+        return false
+    }
+
+    @Test
+    fun test() {
+        val num = 100 // readLine()?.toInt()!!
+        var a = 1
+        var result = ""
+        while (a <= num) {
+            if (num % a == 0) {
+                result += "$a "
+            }
+
+            ++a
+        }
+
+        println("${result.trim()}\n")
     }
 }
